@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/LocSync/app/src/main/res/drawable/rectagle_with_black_outer.xml" value="0.2490740740740741" />
+        <entry key="..\:/LocSync/app/src/main/res/drawable/rounded_corner.xml" value="0.2740740740740741" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/activity_cash.xml" value="0.18" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/activity_check_payment.xml" value="0.19429347826086957" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/activity_fuel.xml" value="0.19701086956521738" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/activity_mains.xml" value="0.1" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/activity_maps2.xml" value="0.22780797101449277" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/content_main.xml" value="0.19429347826086957" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/content_mains.xml" value="0.2" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/dialogforalarm.xml" value="0.19701086956521738" />
+        <entry key="..\:/LocSync/app/src/main/res/layout/retailers.xml" value="0.19429347826086957" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

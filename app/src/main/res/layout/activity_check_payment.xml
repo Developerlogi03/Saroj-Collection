@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgrnd"
+    tools:context=".CheckPayment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/strength_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text=""/>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Check Details"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textColor="#000000"
+        android:id="@+id/login_heading"
+        android:textSize="25dp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/login_headings"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_uniqueid"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/uniqueidfiledcell"
+            android:hint="Check Number"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:paddingLeft="5sp"
+            android:textColorHint="#000" />
+        <EditText
+            android:id="@+id/bankname"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/uniqueidfiledcell"
+            android:hint="Bank Name"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:paddingLeft="5sp"
+            android:textColorHint="#000" />
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/uniqueidfiledcell"
+            android:hint="Enter Amount"
+            android:inputType="number"
+            android:paddingLeft="5sp"
+            android:textColorHint="#000" />
+
+        <EditText
+            android:id="@+id/date123"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:layout_margin="5dp"
+            android:background="@drawable/uniqueidfiledcell"
+            android:hint="Select Date"
+            android:inputType="text"
+            android:paddingLeft="5sp"
+            android:textColorHint="#000" />
+
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/et_uniqueid"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_corner"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="normal" />
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/bg2"
+            >
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
