@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/appbar"
         android:theme="@style/Theme.Locationsync.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -26,6 +27,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="20dp"
+                    android:fontFamily="@font/inter_regular"
                     android:gravity="center"
                     android:text="Dashboard"
                     android:textColor="#fff"
@@ -33,16 +35,37 @@
 
                 <ImageView
                     android:id="@+id/fuel"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logo" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/fuel" />
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/ic_baseline_power_settings_new_24"
+                    android:id="@+id/imgBtnLogout"/>
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_mains" />
+
+    <include
+        layout="@layout/content_mains"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/progressRecycler"/>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

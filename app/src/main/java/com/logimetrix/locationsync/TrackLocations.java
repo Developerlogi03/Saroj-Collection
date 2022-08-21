@@ -69,7 +69,7 @@ public class TrackLocations extends JobService {
     private Location mCurrentLocation;
     private LocationRequest mLocationRequest;
     private Location location;
-    
+
 
     @Override
     public boolean onStartJob(JobParameters params) {

@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 public class GpsLocationReceiver extends BroadcastReceiver
 {
-    APIInterface apiInterface = APIClient1.getClient().create(APIInterface.class);
+    APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
     @Override

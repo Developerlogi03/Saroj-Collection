@@ -1,5 +1,8 @@
 package com.logimetrix.locationsync;
 
+import com.logimetrix.locationsync.Modal.DealerModal;
+import com.logimetrix.locationsync.Modal.RetailerModel;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -22,7 +25,13 @@ interface  APIInterface {
 
     @FormUrlEncoded
     @POST("/api/retailers")
-    Call<String> retalers(@Field("api_token") String api_token);
+    Call<RetailerModel> retalers(@Field("api_token") String api_token);
+
+
+    @FormUrlEncoded
+    @POST("/api/dealers")
+    Call<DealerModal> dealers(@Field("api_token") String api_token);
+
 
     @FormUrlEncoded
     @POST("/api/user/add-payment-by-cheque")

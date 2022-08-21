@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#EEE"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="8dp"
+    android:id="@+id/container">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="#07d0c7"
+        android:id="@+id/cardviewRetailers">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearTop"
+            android:gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:layout_margin="2dp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/inter_regular"
+                android:id="@+id/tvNameEng"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="नाम"
+                android:layout_margin="2dp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/inter_regular"
+                android:id="@+id/tvNameHindi"/>
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</com.google.android.material.card.MaterialCardView>

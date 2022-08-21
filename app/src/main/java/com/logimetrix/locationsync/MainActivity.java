@@ -1,6 +1,9 @@
 package com.logimetrix.locationsync;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -9,19 +12,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,7 +26,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.app.ActivityCompat;
@@ -45,6 +42,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.logimetrix.locationsync.databinding.ActivityMainBinding;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
@@ -63,12 +61,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     Intent mServiceIntent;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -76,20 +76,20 @@ public class MainActivity extends AppCompatActivity {
     private LocationCallback mLocationCallback;
     private FusedLocationProviderClient mFusedLocationClient;
     TextView textview_first;
-    private ProcessingService mYourService;
     EditText et_uniqueid,et_password;
     Button btn_login;
     APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     ImageView simpleImageView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
-        simpleImageView=(ImageView) findViewById(R.id.simpleImageView);
         if(pref.getString("id",null)!=null)
         {
             startActivity(new Intent(MainActivity.this,Mains.class));
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
-        String rationale = "Please provide location permission so that you can ...";
+        String rationale = "Allow app to use location in background";
         Permissions.Options options = new Permissions.Options()
                 .setRationaleDialogTitle("Info")
                 .setSettingsDialogTitle("Warning");
@@ -118,6 +118,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDenied(Context context, ArrayList<String> deniedPermissions) {
                 // permission denied, block the feature.
+                Snackbar.make(
+                                findViewById(R.id.activity_main),
+                                R.string.permission_denied_explanation,
+                                Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.settings, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // Build intent that displays the App settings screen.
+                                Intent intent = new Intent();
+                                intent.setAction(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package",
+                                        getApplicationContext().getPackageName(), null);
+                                intent.setData(uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+
+
             }
         });
         LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -129,26 +150,11 @@ public class MainActivity extends AppCompatActivity {
         boolean bool1 = lm1.isProviderEnabled(LocationManager.GPS_PROVIDER);
         startLocationUpdates();
         initui();
-
-        Glide.with(this)
-                .asGif()
-                .load(R.drawable.person_gif) //Your gif resource
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                .listener(new RequestListener<GifDrawable>() {
-                    @Override
-                    public boolean onLoadFailed(GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .into((ImageView)findViewById(R.id.simpleImageView));
     }
-    public void initui()
-    {
+
+
+    public void initui(){
+
         et_uniqueid=(EditText) findViewById(R.id.et_uniqueid);
         et_password=(EditText) findViewById(R.id.et_password);
         btn_login=(Button)findViewById(R.id.btn_login);
@@ -173,8 +179,11 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            ProgressDialog progressdialog = new ProgressDialog(MainActivity.this);
-            progressdialog.setMessage("Please Wait....");
+
+            SweetAlertDialog progressdialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+           // ProgressDialog progressdialog = new ProgressDialog(MainActivity.this);
+            progressdialog.setTitleText("Please Wait");
+            progressdialog.getProgressHelper().setBarColor(Color.parseColor("#186FA0"));
             progressdialog.show();
             progressdialog.setCancelable(false);
             Call<String> call1 = apiInterface.login(et_uniqueid.getText().toString(),et_password.getText().toString());
@@ -210,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     progressdialog.dismiss();
+                    Toast.makeText(MainActivity.this, "Connection error! Please try Again.", Toast.LENGTH_SHORT).show();
                     call.cancel();
                 }
             });
@@ -230,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
     private void showdialogforgps() {
         if (!isGPSEnabled()) {
             AlertDialog.Builder alertbox = new AlertDialog.Builder(MainActivity.this);
-            alertbox.setMessage("Application requires GPS for your actual position and GPS is not on, press OK button to switch on");
+            alertbox.setMessage("Kindly switch back on the GPS or check the app permissions");
             alertbox.setCancelable(false);
             alertbox.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface arg0, int arg1) {
@@ -291,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
         };
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

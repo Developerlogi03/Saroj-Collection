@@ -14,7 +14,7 @@ public class MyReceiver extends BroadcastReceiver
     {
        // Toast.makeText(context, "ACTION_SCREEN_ON!!", Toast.LENGTH_LONG).show();
         String action = intent.getAction();
-        if(Intent.ACTION_SCREEN_ON.equals(action)) {
+        if(Intent.ACTION_BOOT_COMPLETED.equals(action)) {
            // Toast.makeText(context, "ACTION_SCREEN_ON!!", Toast.LENGTH_LONG).show();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(new Intent(context, ProcessingService.class));
@@ -31,7 +31,7 @@ public class MyReceiver extends BroadcastReceiver
                 context.startService(new Intent(context, ProcessingService.class));
             }
         }
-        else if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
+        else if (Intent.ACTION_SCREEN_ON.equals(action)) {
            // Toast.makeText(context, "BOOT_COMPLETED!!", Toast.LENGTH_LONG).show();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(new Intent(context, ProcessingService.class));

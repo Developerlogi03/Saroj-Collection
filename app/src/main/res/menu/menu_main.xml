@@ -1,10 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.logimetrix.locationsync.MainActivity">
+    tools:context="com.logimetrix.locationsync.Mains">
+
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_launcher_background"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="@string/action_search"
+        app:showAsAction="always"
+        app:actionViewClass="android.widget.SearchView" />
 </menu>

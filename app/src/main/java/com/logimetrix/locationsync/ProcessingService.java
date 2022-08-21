@@ -2,36 +2,32 @@ package com.logimetrix.locationsync;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.provider.Settings;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -53,12 +49,8 @@ import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,7 +67,7 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
     private Context context;
     private boolean stopService = false;
     APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-    APIInterface apiInterface1 = APIClient1.getClient().create(APIInterface.class);
+   // APIInterface apiInterface = APIClient1.getClient().create(APIInterface.class);
     /* For Google Fused API */
     protected GoogleApiClient mGoogleApiClient;
     protected LocationSettingsRequest mLocationSettingsRequest;
@@ -85,10 +77,12 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
     private LocationCallback mLocationCallback;
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
+    private LocationManager locationManager;
     SharedPreferences pref ;
     SharedPreferences.Editor editor ;
     private int battery_value = 0;
     private GPSTracker gpsTracker;
+    BroadcastReceiver broadcastReceiver;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -100,13 +94,12 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private void startMyOwnForeground()
-    {
+    private void startMyOwnForeground(){
         String NOTIFICATION_CHANNEL_ID = "com.logimetrix.locationsync";
-        String channelName = "Background Service";
+        String channelName = "Background Location";
         NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
         chan.setLightColor(Color.BLUE);
-        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         assert manager != null;
@@ -114,11 +107,13 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         Notification notification = notificationBuilder.setOngoing(true)
-                .setContentTitle("Attendance")
+                .setContentTitle(null)
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
         startForeground(2, notification);
+
+        Log.e(TAG_LOCATION, "Foreground.");
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -128,7 +123,7 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
         buildGoogleApiClient();
         startTimer();
 
-
+       installListener();
 //        IntentFilter filter = new IntentFilter();
 //        filter.addAction("android.location.PROVIDERS_CHANGED");
 //        this.getApplicationContext().registerReceiver(receiver, filter);
@@ -140,11 +135,15 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
     public void onDestroy() {
         super.onDestroy();
         stopService = true;
+        System.out.println("Service Destroyed");
+
         if (mFusedLocationClient != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+
             Log.e(TAG_LOCATION, "Location Update Callback Removed");
         }
-
+        //Internet receiver
+        //unregisterReceiver(broadcastReceiver);
 
         stopTimerTask();
         Intent broadcastIntent = new Intent();
@@ -156,7 +155,7 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
     public void startTimer () {
         timer = new Timer() ;
         initializeTimerTask() ;
-        timer.schedule( timerTask , 60000 , Your_X_SECS * 1000 ) ; //
+        timer.schedule( timerTask , 100 , Your_X_SECS * 1000 ) ; //
     }
     public void stopTimerTask () {
         if ( timer != null ) {
@@ -172,28 +171,52 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
                 handler .post( new Runnable() {
                     public void run () {
 
+
                         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                         boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
                         if (isGpsEnabled || isNetworkEnabled) {
                             //location is enabled
-                            //syncgps("On");
+                            syncgps("On");
                             gpsTracker = new GPSTracker(getApplicationContext());
                             if (gpsTracker.canGetLocation()) {
+
                                 latitude = String.valueOf(gpsTracker.getLatitude());
                                 longitude = String.valueOf(gpsTracker.getLongitude());
                             }
                             System.out.println("service is start!!"+latitude+"-"+longitude);
-                            synclocation();
+                           // Toast.makeText(context, latitude+"  "+longitude, Toast.LENGTH_SHORT).show();
+
+                            Call<String> call1 = apiInterface.sendlocation(pref.getString("id",""),""+latitude,""+longitude,pref.getString("api_token",""));
+                            call1.enqueue(new Callback<String>() {
+                                              @Override
+                                              public void onResponse(Call<String> call, Response<String> response) {
+                                                //  Toast.makeText(context, "Sent to Server", Toast.LENGTH_SHORT).show();
+                                              }
+
+                                              @Override
+                                              public void onFailure(Call<String> call, Throwable t) {
+                                                  call.cancel();
+                                              }
+                                          });
+
+
+
+
+
+                            //installListener();
+                           // synclocation();
                           //  Toast.makeText(context, "Gps On.", Toast.LENGTH_SHORT).show();
                         } else {
                             gpsTracker = new GPSTracker(getApplicationContext());
                             if (gpsTracker.canGetLocation()) {
+
                                 latitude = String.valueOf(gpsTracker.getLatitude());
                                 longitude = String.valueOf(gpsTracker.getLongitude());
                             }
                             System.out.println("service is start!!"+latitude+"-"+longitude);
+                           // installListener();
                             synclocation();
                             syncgps("Off");
                         }
@@ -269,16 +292,29 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
     public void onLocationChanged(@NonNull Location location) {
         latitude = "0.0";
         longitude = "0.0";
+
         Log.e(TAG_LOCATION, "Location Changed Latitude : " + location.getLatitude() + "\tLongitude : " + location.getLongitude());
 
         latitude = String.valueOf(location.getLatitude());
         longitude = String.valueOf(location.getLongitude());
+
 
         if (latitude.equalsIgnoreCase("0.0") && longitude.equalsIgnoreCase("0.0")) {
             requestLocationUpdate();
         } else {
             Log.e(TAG_LOCATION, "Latitude : " + location.getLatitude() + "\tLongitude : " + location.getLongitude());
              }
+     //   locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+     //   // getting GPS status
+     //   Boolean gps = locationManager.isProviderEnabled(locationManager.GPS_PROVIDER);
+     //   if (gps){
+     //       syncgps("On");
+     //       Toast.makeText(context, "Gps On", Toast.LENGTH_SHORT).show();
+     //   }else {
+     //       syncgps("Off");
+     //       Toast.makeText(context, "Gps Off", Toast.LENGTH_SHORT).show();
+     //   }
+//
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -317,14 +353,14 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
 
-    public void synclocation()
-    {
-
-        Call<String> call1 = apiInterface.sendlocation(pref.getString("id",""),""+latitude,""+longitude,pref.getString("api_token",""));
+    public void synclocation(){
+       Call<String> call1 = apiInterface.sendlocation(pref.getString("id",""),""+latitude,""+longitude,pref.getString("api_token",""));
         call1.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                System.out.println("service response is :: "+response.body().toString());
+                System.out.println("service response is :: "+response.body());
+                //extra toast
+               // Toast.makeText(context, "Sent to Server", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
@@ -332,6 +368,7 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
                 call.cancel();
             }
         });
+
     }
     private class BatteryMonitorBroadcast extends BroadcastReceiver {
         @Override
@@ -354,11 +391,11 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
     {
         int battery=getBatteryPercentage(getApplicationContext());
         System.out.println("battery level is :: "+battery);
-        Call<String> call1 = apiInterface1.gpsStatus(pref.getString("id",""),status,String.valueOf(battery));
+        Call<String> call1 = apiInterface.gpsStatus(pref.getString("id",""),status,String.valueOf(battery));
         call1.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                System.out.println(status+" :: syncgps response is :: "+response);
+                System.out.println(status+" :: syncgps response is :: ");
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
@@ -388,4 +425,55 @@ public class ProcessingService extends Service implements GoogleApiClient.Connec
             return (int) (batteryPct * 100);
         }
     }
+
+
+
+
+    private void installListener() {
+
+        if (broadcastReceiver == null) {
+
+            broadcastReceiver = new BroadcastReceiver() {
+
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    Bundle extras = intent.getExtras();
+
+                    NetworkInfo info = (NetworkInfo) extras
+                            .getParcelable("networkInfo");
+
+                    NetworkInfo.State state = info.getState();
+                    Log.d("Internet Connection---", info.toString() + " "
+                            + state.toString());
+
+                    if (state == NetworkInfo.State.CONNECTED) {
+
+                        onNetworkUp();
+
+                    } else {
+
+                        onNetworkDown();
+
+                    }
+
+                }
+            };
+
+            final IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            registerReceiver(broadcastReceiver, intentFilter);
+        }
+    }
+
+    private void onNetworkDown() {
+        Toast.makeText(this, "No Internet", Toast.LENGTH_SHORT).show();
+    }
+
+    private void onNetworkUp() {
+
+    }
+
+
+
 }

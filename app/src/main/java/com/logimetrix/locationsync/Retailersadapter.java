@@ -9,14 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Retailersadapter extends RecyclerView.Adapter<Retailersadapter.HolderAIReport>{
     ArrayList<Retailerpojo> aitRecords;
@@ -35,35 +32,13 @@ public class Retailersadapter extends RecyclerView.Adapter<Retailersadapter.Hold
     public void onBindViewHolder(@NonNull Retailersadapter.HolderAIReport holderAIReport, int i) {
         try {
             final Retailerpojo rj=aitRecords.get(i);
-            System.out.println("response is :: "+rj.getName());
-            String no = String.valueOf(i + 1);
-            System.out.println("id is ::"+rj.getName());
+          //  System.out.println("response is :: "+rj.getName());
+          //  String no = String.valueOf(i + 1);
+          //  System.out.println("id is ::"+rj.getName());
             holderAIReport.retailer_name.setText(rj.getName());
             holderAIReport.retailer_nmobile.setText(rj.getMobile_number());
             holderAIReport.retailer_address.setText(rj.getAddress());
             holderAIReport.list_no.setText("#"+rj.getId());
-            holderAIReport.ait_sublist_iv_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage("Pay to retailers");
-                    builder.setTitle("Payment");
-                    builder.setMessage("Do you want to pay this retailer.");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("Cash", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            context.startActivity(new Intent(context,Cash.class));
-                        }
-                    });
-                    builder.setNegativeButton("Check", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            context.startActivity(new Intent(context,CheckPayment.class));
-                        }
-                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,6 +46,7 @@ public class Retailersadapter extends RecyclerView.Adapter<Retailersadapter.Hold
     @Override
     public int getItemCount() {
         return aitRecords.size();
+
     }
     public class HolderAIReport extends RecyclerView.ViewHolder {
         TextView retailer_name,retailer_nmobile,retailer_address,list_no;
