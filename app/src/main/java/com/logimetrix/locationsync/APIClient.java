@@ -15,13 +15,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class APIClient {
+
+    private static final String DEMO = "http://saroj.pmmsapp.com/";//http://srtdev.pmmsapp.com/
+
     private static Retrofit retrofit = null;
-    static Retrofit getClient() {
+    public static Retrofit getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://srtdev.pmmsapp.com/")
+                .baseUrl(DEMO)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
@@ -29,6 +32,18 @@ public class APIClient {
         return retrofit;
     }
 
+    public static Retrofit getRetrofit() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        retrofit = new Retrofit.Builder()
+                .baseUrl(DEMO)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+        return retrofit;
+    }
 
     public static OkHttpClient.Builder getUnsafeOkHttpClient() {
 

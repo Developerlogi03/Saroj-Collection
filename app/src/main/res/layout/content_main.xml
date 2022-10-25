@@ -36,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Attendance"
+            android:text="Collection"
             android:layout_gravity="center"
             android:textColor="#000000"
             android:id="@+id/login_heading"

@@ -1,12 +1,10 @@
 package com.logimetrix.locationsync;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,9 +14,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -39,16 +34,18 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.logimetrix.locationsync.Modal.DealerModal;
+import com.logimetrix.locationsync.Modal.GroupModel;
+import com.logimetrix.locationsync.Modal.RetailerCustomModel;
 import com.logimetrix.locationsync.Modal.RetailerModel;
-import com.logimetrix.locationsync.adapter.AutoCompleteDealerAdapter;
-import com.logimetrix.locationsync.adapter.AutoCompletePlaceAdapter;
+import com.logimetrix.locationsync.Modal.WeekModel;
 import com.logimetrix.locationsync.adapter.RetailerListAdapter;
+import com.logimetrix.locationsync.adapter.WeekListAdapter;
+import com.logimetrix.locationsync.utils.CustomItemClickListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,23 +55,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.PowerManager;
 import android.os.StrictMode;
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.Filter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,7 +74,6 @@ import android.widget.Toast;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -115,7 +106,7 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
     ImageView fuel;
     RetailerListAdapter retailerListAdapter;
     EditText et_uniqueid;
-    Button btn_login;
+    Button btn_login, submit;
     private AppBarConfiguration appBarConfiguration;
     APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
     //APIInterface apiInterface1 = APIClient1.getClient().create(APIInterface.class);
@@ -128,13 +119,12 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
    // BottomNavigationView bottomNav;
     String api_token="";
     ArrayList<Retailerpojo> aitRecord;
-
+    WeekListAdapter weekAdapter;
     List<String> responseList;
     String[] PERMISSIONS = {
             Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
     };
 
-    String rid="";
     BroadcastReceiver broadcastReceiver;
     private int battery_value = 0;
     String[] axisData = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept",
@@ -142,15 +132,17 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
     int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
 
 
-    ImageButton imgBtnLogOut;
+    public String retailerId = "1",dealerId = "1";
     ProgressBar progressBar;
     RecyclerView recyclerViewRetailers;
     LinearLayoutManager linearLayoutManager;
     public List<RetailerModel.Retailer> retailerList;
+    public ArrayList<RetailerModel.Retailer> retailerArrayList = new ArrayList<>();
     public List<DealerModal.Dealer> dealerList;
-
+    int role_id;
     AutoCompleteTextView autocomplete;
-
+    SearchView searchView;
+    private List<WeekModel> weekList = new ArrayList<>();
 
     private BroadcastReceiver locationSwitchStateReceiver = new BroadcastReceiver() {
 
@@ -189,7 +181,16 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mains);
+        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        editor = pref.edit();
+     //   role_id = Integer.parseInt(pref.getString("role_id",null));
+        System.out.println("access token is ::"+pref.getString("api_token",null));
+        api_token=pref.getString("api_token",null);
+     //   role_id=pref.getString("role_id",null);
+     //   Log.d(TAG, "onCreate: "+role_id);
 
+
+        setSupportActionBar(findViewById(R.id.toolbar));
         StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder(old)
                 .permitDiskWrites()
@@ -207,11 +208,19 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
         registerReceiver(mReceiver, filter);
 
 
-        imgBtnLogOut = findViewById(R.id.imgBtnLogout);
+        searchView = (SearchView) findViewById(R.id.searchView);
+        submit = findViewById(R.id.btnDealerRetailer);
         progressBar = findViewById(R.id.progressRecycler);
         recyclerViewRetailers = findViewById(R.id.rcyclRtlrLst);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         recyclerViewRetailers.setLayoutManager(linearLayoutManager);
+
+
+        //remaove
+       // recyclerViewRetailers.setLayoutManager(new LinearLayoutManager(this));
+        //remove when to use SetList
+       // retailerListAdapter = new RetailerListAdapter();
+       // recyclerViewRetailers.setAdapter(retailerListAdapter);
 
         installListener();
 
@@ -223,10 +232,10 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
 
         recyclerViewRetailers.setLayoutManager(new LinearLayoutManager(this));
         btn_login=(Button)findViewById(R.id.btn_login);
-        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        editor = pref.edit();
-        System.out.println("access token is ::"+pref.getString("api_token",null));
-        api_token=pref.getString("api_token",null);
+        
+
+        Log.d(TAG, "onCreate: "+pref.getString("role_id",null));
+
         if(!hasPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
@@ -280,21 +289,27 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
             startService(new Intent(getBaseContext(), ProcessingService.class));
         }
 
-        imgBtnLogOut.setOnClickListener(new View.OnClickListener() {
+        //remove for demo
+
+        //for reatilers
+       // fetchRetailers();
+
+       // fetchDealers();
+
+        fetchWeek();
+
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.apply();
+                Toast.makeText(Mains.this, "Retailer ID : "+retailerId, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Mains.this, "Dealer ID : "+dealerId, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Mains.this,CollectMoney.class);
+                intent.putExtra("dealerID",dealerId);
+                intent.putExtra("retailerID", retailerId);
+                startActivity(intent);
 
-                Intent i = new Intent(Mains.this,MainActivity.class);
-                startActivity(i);
-                finish();
             }
         });
-
-        fetchRetailers();
-        fetchDealers();
         //Remove
        // getRetailers();
 
@@ -313,6 +328,193 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
       //  autocomplete.setThreshold(2);
       //  autocomplete.setAdapter(adapter);
 
+
+        retailerList = new ArrayList<>();
+        String token = pref.getString("api_token",null);
+        APIInterface apiService = APIClient.getClient().create(APIInterface.class);
+        Call<List<RetailerModel.Retailer>> call = apiService.retalersNew(token);
+
+        call.enqueue(new Callback<List<RetailerModel.Retailer>>() {
+            @Override
+            public void onResponse(Call<List<RetailerModel.Retailer>> call, Response<List<RetailerModel.Retailer>> response) {
+                if (response.isSuccessful()){
+                    retailerList = response.body();
+                    Log.d("TAG","list response "+retailerList);
+                    System.out.print("myList : "+retailerList);
+                    // retailerListAdapter.setMovieList(getApplicationContext(),retailerList);
+                    retailerListAdapter = new RetailerListAdapter(retailerList, getApplicationContext(), new CustomItemClickListener() {
+                        @Override
+                        public void onItemClick(RetailerModel.Retailer retailer, int position) {
+                            Toast.makeText(Mains.this, retailer.getName(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onWeekClick(WeekModel weekModel, int position) {
+
+                        }
+
+                        @Override
+                        public void onGroupClick(GroupModel groupModel, int position) {
+
+                        }
+
+                        @Override
+                        public void onRetailerClick(RetailerCustomModel retailerCustomModel, int position) {
+
+                        }
+                    });
+
+                    recyclerViewRetailers.setAdapter(retailerListAdapter);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<RetailerModel.Retailer>> call, Throwable t) {
+              //  Toast.makeText(Mains.this, "Connection Error! Please try again.", Toast.LENGTH_SHORT).show();
+                Log.d("TAG","Response = "+t.toString());
+            }
+        });
+
+
+
+
+        // for retailers
+
+        /*
+
+          searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (!query.isEmpty()){
+                    retailerListAdapter.getFilter().filter(query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (!newText.isEmpty()){
+                    retailerListAdapter.getFilter().filter(newText);
+                }else {
+                    fetchRetailers();
+                }
+                return false;
+            }
+        });
+
+         */
+
+
+
+    }
+
+    private void fetchWeek() {
+        progressBar.setVisibility(View.VISIBLE);
+        String token = pref.getString("api_token",null);
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<String> call = apiInterface.week(token);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()){
+                    progressBar.setVisibility(View.GONE);
+                    String routId, routeName, dayId = null, dayName;
+                    if (!response.body().isEmpty()){
+                        String jsonResponse = response.body().toString();
+                        JSONObject jsonObject = null;
+
+                        try {
+                            jsonObject = new JSONObject(jsonResponse);
+
+                            if (jsonObject.optString("flag").equals("true")){
+
+                                JSONArray dataArray  = jsonObject.getJSONArray("routes");
+
+                                for (int i = 0; i < dataArray.length(); i++) {
+                                    JSONObject dataobj = dataArray.getJSONObject(i);
+                                    routId = dataobj.getString("id");
+                                    routeName = dataobj.getString("name");
+                                    dayId = dataobj.getString("day");
+
+                                    JSONArray dataDays  = jsonObject.getJSONArray("day");
+
+                                    for (int j = 0; j<dataDays.length(); j++){
+                                        JSONObject dayData = dataDays.getJSONObject(j);
+                                        dayName = dayData.getString(dayId);
+
+                                        WeekModel weekModel = new WeekModel();
+                                        weekModel.setName(dayName);
+                                        weekModel.setRoutId(routId);
+                                        weekList.add(weekModel);
+                                        weekAdapter = new WeekListAdapter(weekList, getApplicationContext(), new CustomItemClickListener() {
+                                            @Override
+                                            public void onItemClick(RetailerModel.Retailer retailer, int position) {
+
+                                            }
+
+                                            @Override
+                                            public void onWeekClick(WeekModel weekModel, int position) {
+                                                Intent intent = new Intent(Mains.this,GroupActivity.class);
+                                                intent.putExtra("routeId", weekModel.getRoutId().toString());
+                                                startActivity(intent);
+                                            }
+
+                                            @Override
+                                            public void onGroupClick(GroupModel groupModel, int position) {
+
+                                            }
+
+                                            @Override
+                                            public void onRetailerClick(RetailerCustomModel retailerCustomModel, int position) {
+
+                                            }
+                                        });
+                                        recyclerViewRetailers.setAdapter(weekAdapter);
+                                        weekAdapter.notifyDataSetChanged();
+                                    }
+
+                                }
+
+                                //
+
+                            }else if (jsonObject.optString("flag").equals("false")){
+
+                                if (jsonObject.optString("is_token_expired").equals("true")){
+                                    new SweetAlertDialog(Mains.this, SweetAlertDialog.WARNING_TYPE)
+                                            .setTitleText("Logout")
+                                            .setContentText(jsonObject.optString("message").toString())
+                                            .setConfirmText("okay")
+                                            .showCancelButton(false)
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    logout();
+                                                }
+                                            })
+                                            .show();
+                                }
+                                Toast.makeText(Mains.this,jsonObject.optString("message").toString() , Toast.LENGTH_SHORT).show();
+
+                                // Toast.makeText(FarmerBasicKYC.this, jsonObject.optString("message"), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
     private void fetchRetailers() {
@@ -325,13 +527,58 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
             public void onResponse(Call<RetailerModel> call, Response<RetailerModel> response) {
                 if (response.isSuccessful()){
                     if (!response.body().getFlag()){
+                        if (response.body().getTokenExpired()){
+                            new SweetAlertDialog(Mains.this, SweetAlertDialog.WARNING_TYPE)
+                                    .setTitleText("Logout")
+                                    .setContentText(response.body().getMessage())
+                                    .setConfirmText("okay")
+                                    .showCancelButton(false)
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            logout();
+                                        }
+                                    })
+                                    .show();
+
+                        }
                         Toast.makeText(Mains.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                     }else {
 
-                        retailerList = response.body().getRetailers();
-                     //   retailerListAdapter = new RetailerListAdapter(retailerList,getApplicationContext());
-                     //   recyclerViewRetailers.setAdapter(retailerListAdapter);
+                        List<RetailerModel.Retailer> listRetailer;                   //Changes for Search Filter
+                        listRetailer = response.body().getRetailers();
+                        retailerArrayList = new ArrayList<>(listRetailer);
+
+                     //   retailerList = response.body().getRetailers();
+
+                        //Remove if use setList
+                        retailerListAdapter = new RetailerListAdapter(retailerArrayList, getApplicationContext(), new CustomItemClickListener() {
+                            @Override
+                            public void onItemClick(RetailerModel.Retailer retailer, int position) {
+                                Intent intent = new Intent(Mains.this,CollectMoney.class);
+                                retailerId = String.valueOf(retailer.getId());
+                                intent.putExtra("retailerId",retailerId);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onWeekClick(WeekModel weekModel, int position) {
+
+                            }
+
+                            @Override
+                            public void onGroupClick(GroupModel groupModel, int position) {
+
+                            }
+
+                            @Override
+                            public void onRetailerClick(RetailerCustomModel retailerCustomModel, int position) {
+
+                            }
+                        });
+
+                        recyclerViewRetailers.setAdapter(retailerListAdapter);
 
 
                         AutoCompletePlaceAdapter adapter = new AutoCompletePlaceAdapter(getApplicationContext(), retailerList);
@@ -356,6 +603,7 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
         });
     }
 
+
     private void fetchDealers(){
         progressBar.setVisibility(View.VISIBLE);
         String token = pref.getString("api_token",null);
@@ -370,7 +618,9 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
                 }else{
                     dealerList = response.body().getDealers();
 
-                    AutoCompleteDealerAdapter autoCompleteDealerAdapter = new AutoCompleteDealerAdapter(getApplicationContext(),dealerList);
+                    AutoCompleteDealerAdapter autoCompleteDealerAdapter = new AutoCompleteDealerAdapter(getApplicationContext(), dealerList){
+
+                    };
 
                     AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView2);
                     autoCompleteTextView.setThreshold(2);
@@ -399,6 +649,55 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+
+            case R.id.voucher:
+              //  Toast.makeText(this, "Not Allowed", Toast.LENGTH_SHORT).show();
+                //remove for demo
+                voucher();
+
+                return true;
+            case R.id.logOut:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void logout() {
+
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent i = new Intent(Mains.this,MainActivity.class);
+        startActivity(i);
+        finish();
+
+    }
+
+    private void voucher() {
+        if (role_id <= 1){
+            Intent intent = new Intent(Mains.this, VoucherApproval.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(Mains.this, VoucherActivity.class);
+            startActivity(intent);
+        }
+        
+    }
 
     private void showdialogforgps() {
         if (!isGPSEnabled()) {
@@ -441,7 +740,8 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 222) {
-            showdialogforgps();
+         //   showdialogforgps();
+            turnGPSOn(); //edited
         }
     }
     private boolean isGPSEnabled() {
@@ -619,5 +919,158 @@ public class Mains extends AppCompatActivity implements OnMapReadyCallback,
         installListener();
         startService(new Intent(this,ProcessingService.class));
     }
+
+
+    public class AutoCompleteDealerAdapter extends ArrayAdapter<DealerModal.Dealer> {
+        private List<DealerModal.Dealer> allDealerList;
+        private List<DealerModal.Dealer> filteredDealerList;
+        private CustomItemClickListener customItemClickListener;
+
+
+
+        public AutoCompleteDealerAdapter(@NonNull Context context, @NonNull List<DealerModal.Dealer> dealerList){
+            super(context,0,dealerList);
+            allDealerList = new ArrayList<>(dealerList);
+        }
+
+        @NonNull
+        @Override
+        public Filter getFilter() {
+            return dealerFilter;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null){
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_simple,parent,false);
+            }
+            TextView placeDealer = convertView.findViewById(R.id.autocomplete_item_place_label);
+            TextView placeDealer1 = convertView.findViewById(R.id.autocomplete_item_place_label_address);
+
+            DealerModal.Dealer dealer = getItem(position);
+            if (dealer != null){
+                placeDealer.setText(dealer.getName());
+                placeDealer1.setText(dealer.getAddress1());
+            }
+
+
+            return convertView;
+        }
+
+        private Filter dealerFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                FilterResults results = new FilterResults();
+                filteredDealerList = new ArrayList<>();
+
+                if (charSequence == null || charSequence.length() == 0){
+                    filteredDealerList.addAll(allDealerList);
+                }else {
+                    String filterPattern = charSequence.toString().toLowerCase().trim();
+                    for (DealerModal.Dealer dealer: allDealerList) {
+                        if (dealer.getName().toLowerCase().contains(filterPattern)) {
+                            filteredDealerList.add(dealer);
+                        }
+                    }
+                }
+                results.values =filteredDealerList;
+                results.count  =filteredDealerList.size();
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                clear();
+                addAll((List) filterResults.values);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public CharSequence convertResultToString(Object resultValue) {
+                return ((DealerModal.Dealer) resultValue).getName();
+            }
+        };
+
+    }
+
+
+    public class AutoCompletePlaceAdapter extends ArrayAdapter<RetailerModel.Retailer> {
+        private List<RetailerModel.Retailer> allPlacesList;
+        private List<RetailerModel.Retailer> filteredPlacesList;
+
+        public AutoCompletePlaceAdapter(@NonNull Context context, @NonNull List<RetailerModel.Retailer> placesList) {
+            super(context, 0, placesList);
+
+            allPlacesList = new ArrayList<>(placesList);
+        }
+
+        @NonNull
+        @Override
+        public Filter getFilter() {
+            return placeFilter;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(
+                        R.layout.item_simple, parent, false
+                );
+            }
+            TextView placeLabel = convertView.findViewById(R.id.autocomplete_item_place_label);
+            TextView placeLabel1 = convertView.findViewById(R.id.autocomplete_item_place_label_address);
+
+            RetailerModel.Retailer place = getItem(position);
+            if (place != null) {
+                placeLabel.setText(place.getName());
+                placeLabel1.setText(place.getAddress());
+                retailerId = String.valueOf(place.getId());
+            }
+
+            return convertView;
+        }
+
+        private Filter placeFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+
+                filteredPlacesList = new ArrayList<>();
+
+                if (constraint == null || constraint.length() == 0) {
+                    filteredPlacesList.addAll(allPlacesList);
+                } else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (RetailerModel.Retailer place: allPlacesList) {
+                        if (place.getName().toLowerCase().contains(filterPattern)) {
+                            filteredPlacesList.add(place);
+                        }
+                    }
+                }
+
+                results.values = filteredPlacesList;
+                results.count = filteredPlacesList.size();
+
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                clear();
+                addAll((List) results.values);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public CharSequence convertResultToString(Object resultValue) {
+                return ((RetailerModel.Retailer) resultValue).getName();
+            }
+        };
+    }
+
+
 
 }

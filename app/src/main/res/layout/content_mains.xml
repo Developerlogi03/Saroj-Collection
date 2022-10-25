@@ -9,103 +9,87 @@
         android:layout_height="match_parent">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/relativeTop"
-        android:visibility="gone">
-
-
-        <Spinner
-            android:id="@+id/spinReatilers"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_below="@id/spinReatilers"
-            android:id="@+id/spinDealers"/>
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linearMainsRetail"
+        android:id="@+id/lineartopMain"
+        android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_centerInParent="true">
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/textView2"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearMainsRetail"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:layout_marginTop="25dp"
+                android:textSize="20sp"
+                android:text="Select Retailer :" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:hint="Search Retailers..."
+                android:layout_below="@+id/textView2"
+                android:textAlignment="center"
+                android:layout_marginTop="10dp"
+                android:ems="10" />
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:layout_marginTop="25dp"
+                android:textSize="20sp"
+                android:text="Select Dealer :" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:hint="Search Dealers..."
+                android:layout_below="@+id/textView2"
+                android:textAlignment="center"
+                android:layout_marginTop="10dp"
+                android:ems="10" />
+
+        </LinearLayout>
+
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/black"
-            android:layout_marginTop="25dp"
-            android:textSize="20sp"
-            android:text="Select Retailer :" />
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:hint="Search Retailers..."
-            android:layout_below="@+id/textView2"
-            android:textAlignment="center"
-            android:layout_marginTop="10dp"
-            android:ems="10" />
-
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/black"
-            android:layout_marginTop="25dp"
-            android:textSize="20sp"
-            android:text="Select Dealer :" />
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:hint="Search Dealers..."
-            android:layout_below="@+id/textView2"
-            android:textAlignment="center"
-            android:layout_marginTop="10dp"
-            android:ems="10" />
+            android:id="@+id/btnDealerRetailer"
+            android:layout_below="@id/linearMainsRetail"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:text="submit"/>
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnDealerRetailer"
-        android:layout_below="@id/linearMainsRetail"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:text="submit"/>
-
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcyclRtlrLst"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:visibility="gone"
-        android:id="@+id/rcyclRtlrLst"/>
+        android:visibility="visible"/>
+
+
 
 </RelativeLayout>

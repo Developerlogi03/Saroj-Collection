@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Mains">
+    tools:context=".VoucherActivity">
+
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -20,24 +22,27 @@
             app:popupTheme="@style/Theme.Locationsync.PopupOverlay">
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:id="@+id/rlName"
                 android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="20dp"
                     android:fontFamily="@font/inter_regular"
                     android:gravity="center"
-                    android:text="Dashboard"
+                    android:text="Create Voucher"
                     android:textColor="#fff"
                     android:textSize="20dp" />
 
+
                 <ImageView
-                    android:id="@+id/fuel"
-                    android:layout_width="55dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/logo" />
+                    android:id="@+id/back"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:onClick="back"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_arrow_back_24" />
 
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -45,25 +50,17 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/appbar"
-        android:visibility="gone" />
-
     <include
-        layout="@layout/content_mains"
+        layout="@layout/collect_voucher"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/searchView" />
+        android:layout_below="@id/appbar" />
 
     <ProgressBar
+        android:id="@+id/progressVoucher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:visibility="gone"
-        android:id="@+id/progressRecycler"/>
-
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

@@ -30,17 +30,47 @@
         <entry key="..\:/LocSync/app/src/main/res/layout/main_content.xml" value="0.27291666666666664" />
         <entry key="..\:/LocSync/app/src/main/res/layout/retailers.xml" value="0.33" />
         <entry key="..\:/Users/badal/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/select_dialog_item.xml" value="0.12158054711246201" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/activity_collect_money.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/activity_ledger.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/content_collect.xml" value="0.15760869565217392" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/fragment_one.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/fragment_total_balance.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/fragment_two.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/item_total_balance_layout.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync v1.5.4/LocSync/LocSync/app/src/main/res/layout/main_content.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/drawable/background.xml" value="0.138" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/drawable/edittext_clear_bg.xml" value="0.1625" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.1" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/drawable/logout-48px.xml" value="0.1" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_cash.xml" value="0.152" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_check_payment.xml" value="0.2" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_collect_money.xml" value="0.176" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_collection_list.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_group.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_main.xml" value="0.14719202898550723" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_mains.xml" value="0.2" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_retailer_list.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_splash.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_voucher.xml" value="0.264" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_voucher_approval.xml" value="0.264" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/activity_week.xml" value="0.25" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/collect_voucher.xml" value="0.24895833333333334" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/content_collect.xml" value="0.2" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/content_main.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/content_mains.xml" value="0.152" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/dialog_searchable_spinner.xml" value="0.22826086956521738" />
-        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/item_recycler_main.xml" value="0.2" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/fragment_first.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/fragment_first2.xml" value="0.12158054711246201" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/fragment_one.xml" value="0.12158054711246201" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/fragment_second.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/fragment_two.xml" value="0.12107396149949341" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/item_approval.xml" value="0.2" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/item_recycler_main.xml" value="0.32038834951456313" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/item_simple.xml" value="0.2" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/main_content.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/main_menu.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/retailers.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/layout/temp.xml" value="0.136" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/menu/main_menu.xml" value="0.24895833333333334" />
         <entry key="..\:/Users/badal/OneDrive/Desktop/Android Projects/LocSync/app/src/main/res/menu/menu_main.xml" value="0.25" />
       </map>

@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background">
+
+    <TextView
+        android:id="@+id/closinbal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#186FA0"
+        android:text="Closing Balance : ₹" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvClosingBal"
+        android:layout_toEndOf="@id/closinbal"
+        android:layout_marginTop="20dp"/>
+
+    <RelativeLayout
+        android:id="@+id/relativedebit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/closinbal">
+
+        <TextView
+            android:id="@+id/totaldebit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Total Debit : ₹"
+            android:textColor="#186FA0" />
+
+        <TextView
+            android:id="@+id/tvtotalDebit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/totaldebit" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativecredit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativedebit">
+
+        <TextView
+            android:id="@+id/totalcredit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Total Credit : ₹"
+            android:textColor="#186FA0" />
+
+        <TextView
+            android:id="@+id/tvtotalCredit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/totalcredit" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/RlSpinDealer"
+        android:layout_margin="5dp"
+        android:layout_below="@id/relativecredit">
+
+        <Spinner
+            android:id="@+id/spinnerDealers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+
+
+    <belka.us.androidtoggleswitch.widgets.ToggleSwitch
+        android:id="@+id/toggleSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="10sp"
+        custom:activeBgColor="#186FA0"
+        custom:cornerRadius="15dp"
+        custom:inactiveBgColor="@color/white"
+        custom:inactiveTextColor="#186FA0"
+        custom:textToggleLeft="Cash"
+        custom:textToggleRight="Cheque"
+        custom:toggleWidth="70dp" />
+
+
+    <EditText
+        android:id="@+id/date123"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_below="@id/RlSpinDealer"
+        android:layout_gravity="center"
+        android:background="@drawable/uniqueidfiledcell"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
+        android:hint="Select Date"
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:textColorHint="#000"
+        android:visibility="gone"/>
+
+
+    <RelativeLayout
+        android:id="@+id/hiddenCash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/date123"
+        android:visibility="visible">
+
+
+        <RelativeLayout
+            android:id="@+id/relativeDenomination"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtns"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹2000 X"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtns"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decrease"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increase"
+                    android:layout_toEndOf="@id/decrease"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increase"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relative500"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/relativeDenomination"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtns500"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹500 X"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtns500"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decrease500"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_number500"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increase500"
+                    android:layout_toEndOf="@id/decrease500"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increase500"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative200"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/relative500"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtns200"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹200 X"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtns200"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decrease200"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_number200"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increase200"
+                    android:layout_toEndOf="@id/decrease200"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increase200"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative100"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/relative200"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtns100"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹100 X"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtns100"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decrease100"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_number100"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increase100"
+                    android:layout_toEndOf="@id/decrease100"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increase100"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative50"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/relative100"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtns50"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹50 X"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtns50"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decrease50"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_number50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increase50"
+                    android:layout_toEndOf="@id/decrease50"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increase50"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative20"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/relative50"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtns20"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹20 X"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtns20"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decrease20"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_number20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increase20"
+                    android:layout_toEndOf="@id/decrease20"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increase20"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative10"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/relative20"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtns10"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹10 X"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtns10"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decrease10"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_number10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increase10"
+                    android:layout_toEndOf="@id/decrease10"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increase10"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeChnage"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/relative10"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/relativeBtnschnage"
+                android:fontFamily="@font/inter_regular"
+                android:text="₹ change"
+                android:textAlignment="center"
+                android:textColor="#186FA0"
+                android:textSize="30sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/relativeBtnschnage"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/decreasecoin"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/ic_baseline_remove_24"
+                    android:onClick="increaseInteger" />
+
+                <TextView
+                    android:id="@+id/integer_numbercoin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/increasecoin"
+                    android:layout_toEndOf="@id/decreasecoin"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/increasecoin"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/ic_baseline_add_24" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeremark"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/relativeChnage"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etpaymentrefcash"
+                android:layout_centerInParent="true"
+                android:background="@drawable/edittext_clear_bg"
+                android:hint="Payment reference no."
+                android:inputType="textWebEditText"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnDepositCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativeremark"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
+            android:text="Deposit" />
+
+
+        <RelativeLayout
+            android:id="@+id/relativeTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativeremark"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/rupee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ "
+                android:textColor="#135880"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/tvTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/rupee"
+                android:text="0"
+                android:textColor="#135880"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/date123"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:id="@+id/hiddenLinearCheque"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_uniqueid"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:maxLength="50"
+            android:background="@drawable/uniqueidfiledcell"
+            android:hint="Check Number"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:paddingLeft="5sp"
+            android:textColorHint="#000" />
+        <EditText
+            android:id="@+id/bankname"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/uniqueidfiledcell"
+            android:hint="Bank Name"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:paddingLeft="5sp"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:textColorHint="#000" />
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/uniqueidfiledcell"
+            android:hint="Enter Amount"
+            android:inputType="number"
+            android:paddingLeft="5sp"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:textColorHint="#000" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/etpaymentrefcheque"
+            android:layout_centerInParent="true"
+            android:background="@drawable/edittext_clear_bg"
+            android:hint="Payment reference no."
+            android:layout_margin="5dp"
+            android:inputType="textWebEditText"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+
+
+        <Button
+            android:id="@+id/btnDepositCheque"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/et_uniqueid"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_corner"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="normal" />
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

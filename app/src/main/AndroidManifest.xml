@@ -14,10 +14,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-
 
     <application
         android:name=".MyAppContext"
@@ -31,6 +29,37 @@
         android:theme="@style/Theme.Locationsync"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
+        <activity
+            android:name=".LedgerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Locationsync.NoActionBar" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".RetailerListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Locationsync.NoActionBar" />
+        <activity
+            android:name=".GroupActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Locationsync.NoActionBar" />
+        <activity
+            android:name=".CollectionList"
+            android:exported="false" />
+        <activity
+            android:name=".VoucherApproval"
+            android:exported="false"
+            android:theme="@style/Theme.Locationsync.NoActionBar" />
+        <activity
+            android:name=".VoucherActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Locationsync.NoActionBar" />
+        <activity
+            android:name=".CollectMoney"
+            android:exported="false"
+            android:theme="@style/Theme.Locationsync.NoActionBar" />
         <activity
             android:name=".Splash"
             android:exported="true"
@@ -56,14 +85,14 @@
 
         <activity
             android:name=".Mains"
-            android:label="@string/title_activity_mains"
             android:excludeFromRecents="true"
+            android:label="@string/title_activity_mains"
             android:theme="@style/Theme.Locationsync.NoActionBar" />
         <activity
             android:name=".MainActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/app_name"
-            android:excludeFromRecents="true"
             android:theme="@style/Theme.Locationsync.NoActionBar" />
 
         <service

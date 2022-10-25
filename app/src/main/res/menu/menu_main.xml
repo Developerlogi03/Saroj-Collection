@@ -1,13 +1,24 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.logimetrix.locationsync.Mains">
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_launcher_background"
-        android:orderInCategory="100"
-        android:title="@string/action_search"
-        app:showAsAction="always"
-        app:actionViewClass="android.widget.SearchView" />
+        android:id="@+id/overflowMenu"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+
+            <item
+                android:id="@+id/voucher"
+                android:title="Voucher/Approval"
+                />
+            <item
+                android:icon="@drawable/ic_baseline_login_24"
+                android:title="Logout"
+                android:id="@+id/logOut"
+                />
+        </menu>
+    </item>
 </menu>

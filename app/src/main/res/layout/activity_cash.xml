@@ -26,6 +26,7 @@
             android:id="@+id/login_heading"
             android:textSize="25dp"
             />
+
         <EditText
             android:id="@+id/date123"
             android:layout_width="fill_parent"
@@ -40,6 +41,7 @@
             android:inputType="text"
             android:paddingLeft="5sp"
             android:textColorHint="#000" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_marginBottom="5dp"

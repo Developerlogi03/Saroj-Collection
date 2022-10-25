@@ -21,8 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/logo"
         android:layout_centerHorizontal="true"
-        android:text="Attendance"
         android:fontFamily="@font/inter_regular"
+        android:text="Collection"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="20dp" />

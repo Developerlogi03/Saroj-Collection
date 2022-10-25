@@ -43,7 +43,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.logimetrix.locationsync.databinding.ActivityMainBinding;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     Intent mServiceIntent;
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
     Location mcurrentLocation;
     private LocationCallback mLocationCallback;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -90,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
-        if(pref.getString("id",null)!=null)
-        {
+        if(pref.getString("id",null)!=null){
             startActivity(new Intent(MainActivity.this,Mains.class));
             finish();
         }
@@ -199,9 +196,11 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jj1 = jj.getJSONObject("user");
                             editor.putString("email", jj1.getString("email"));
                             editor.putString("id", jj1.getString("id"));
+                            editor.putString("role_id", jj1.getString("role_id"));
                             editor.putString("api_token", jj1.getString("api_token"));
                             editor.apply();
                             editor.commit();
+                            Log.d(TAG, "LoginData : " +jj1.getString("role_id"));
                             startActivity(new Intent(MainActivity.this,Mains.class));
                             finish();
                         }else

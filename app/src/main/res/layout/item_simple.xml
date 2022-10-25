@@ -12,6 +12,15 @@
         android:text="TextView"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="15dp"/>
+        android:layout_marginEnd="5dp"/>
+
+    <TextView
+        android:id="@+id/autocomplete_item_place_label_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="15dp"/>
 
 </LinearLayout>
