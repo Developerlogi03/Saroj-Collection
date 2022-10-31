@@ -3,8 +3,17 @@ package com.logimetrix.locationsync.Modal;
 public class GroupModel {
     String groupId;
     String groupColor;
+    String amount;
     String groupName;
     boolean isColor;
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 
     public String getGroupId() {
         return groupId;

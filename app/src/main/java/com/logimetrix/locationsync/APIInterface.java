@@ -118,5 +118,8 @@ public interface  APIInterface {
     @FormUrlEncoded
     @POST("/api/retailer-ledger-excel")
     Call<String> ledgerfileUrl( @Field("api_token") String token,@Field("retailer_id") String retailer_id);
+    @FormUrlEncoded
+    @POST("/api/retailer-invoice-list")
+    Call<String> retailerInvoicelist( @Field("api_token") String token,@Field("retailer_id") String retailer_id);
 
 }

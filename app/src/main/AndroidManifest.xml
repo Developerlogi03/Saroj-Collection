@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.logimetrix.locationsync">
+    package="com.logimetrix.locationsync" >
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -28,7 +28,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Locationsync"
         android:usesCleartextTraffic="true"
-        tools:replace="android:icon">
+        tools:replace="android:icon" >
+        <activity
+            android:name=".InvoiceActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Locationsync.NoActionBar"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".LedgerActivity"
             android:exported="false"
@@ -64,7 +73,7 @@
             android:name=".Splash"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Locationsync.NoActionBar">
+            android:theme="@style/Theme.Locationsync.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -100,7 +109,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_JOB_SERVICE"
-            tools:ignore="IntentFilterExportedReceiver">
+            tools:ignore="IntentFilterExportedReceiver" >
             <intent-filter>
                 <action
                     android:name=".ProcessingService"
@@ -114,7 +123,7 @@
             android:name=".MyReceiver"
             android:enabled="true"
             android:exported="true"
-            tools:node="merge">
+            tools:node="merge" >
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_OFF" />
                 <action android:name="android.intent.action.SCREEN_ON" />
@@ -125,7 +134,7 @@
             android:name=".GpsLocationReceiver"
             android:enabled="true"
             android:exported="true"
-            tools:node="merge">
+            tools:node="merge" >
             <intent-filter>
                 <action android:name="android.location.PROVIDERS_CHANGED" />
 

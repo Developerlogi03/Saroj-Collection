@@ -4,7 +4,6 @@ package com.logimetrix.locationsync.fragments;
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
-import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -32,28 +30,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.logimetrix.locationsync.APIClient;
 import com.logimetrix.locationsync.APIInterface;
-import com.logimetrix.locationsync.LedgerActivity;
+import com.logimetrix.locationsync.InvoiceActivity;
 import com.logimetrix.locationsync.MainActivity;
-import com.logimetrix.locationsync.Modal.GroupModel;
 import com.logimetrix.locationsync.Modal.LedgerModel;
-import com.logimetrix.locationsync.Modal.RetailerModel;
-import com.logimetrix.locationsync.Modal.WeekModel;
 import com.logimetrix.locationsync.R;
-import com.logimetrix.locationsync.RetailerListActivity;
 import com.logimetrix.locationsync.adapter.FragmentOneAdapter;
-import com.logimetrix.locationsync.adapter.RetailerListCustomAdapter;
-import com.logimetrix.locationsync.utils.CustomItemClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +60,7 @@ public class FragmentOne extends Fragment implements SwipeRefreshLayout.OnRefres
     private Context context;
 
     TextView totalCredit, totalDebit, totalBal;
-    Button btnLedger;
+    Button btnLedger,btnInvoice;
 
     // Progress Dialog
     private ProgressDialog dialog;
@@ -109,6 +95,7 @@ public class FragmentOne extends Fragment implements SwipeRefreshLayout.OnRefres
         totalDebit = view.findViewById(R.id.tvTotalDebit);
         totalBal = view.findViewById(R.id.tvTotalBal);
         btnLedger = view.findViewById(R.id.ledger);
+        btnInvoice =view.findViewById(R.id.invoice);
 
 
         linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
@@ -129,6 +116,14 @@ public class FragmentOne extends Fragment implements SwipeRefreshLayout.OnRefres
             @Override
             public void onClick(View v) {
                 fetchFileUrl();
+            }
+        });
+        btnInvoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i =new Intent(getActivity(), InvoiceActivity.class);
+                i.putExtra("retail_id",retailerId);
+                startActivity(i);
             }
         });
 

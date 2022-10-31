@@ -74,17 +74,33 @@
 
 
             </LinearLayout>
-
+            <LinearLayout
+                android:id="@+id/linerBtn"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_below="@id/linerlayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <Button
                 android:id="@+id/ledger"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/linerlayout1"
-                android:layout_centerHorizontal="true"
                 android:text="ledger" />
+            <Button
+                android:id="@+id/invoice"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Invoice" />
+            </LinearLayout>
+
+
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_below="@id/ledger"
+                android:layout_below="@id/linerBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/had_title">

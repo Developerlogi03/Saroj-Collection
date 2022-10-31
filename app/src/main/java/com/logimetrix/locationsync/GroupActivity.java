@@ -7,10 +7,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -47,6 +49,7 @@ public class GroupActivity extends AppCompatActivity {
     ProgressBar progressBar;
     String routId;
     String groupId, groupName;
+    TextView txtdebit,txtCredit;
     String color = "";
     private List<GroupModel> groupList = new ArrayList<>();
 
@@ -102,6 +105,11 @@ public class GroupActivity extends AppCompatActivity {
                                 for (int i = 0; i < dataArray.length(); i++) {
                                     JSONObject dataobj = dataArray.getJSONObject(i);
                                     boolean iscolor = false;
+
+                               /*     int diff = dataobj.optInt("totalCredit") - dataobj.optInt("totalDebit");
+                                    String value = String.valueOf(diff).trim();
+                                    String finVal = value.replace("-","");
+                                 */
                                     groupId = dataobj.getString("group_id");
                                     groupName = dataobj.getString("group_name");
                                     if (!dataobj.getString("color").isEmpty()){
@@ -114,6 +122,7 @@ public class GroupActivity extends AppCompatActivity {
                                         groupModel.setGroupColor(color);
                                         groupModel.setGroupName(groupName);
                                         groupModel.setColor(iscolor);
+                                        //groupModel.setAmount("₹ "+finVal);
                                         groupList.add(groupModel);
 
                                         adapter = new GroupAdapter(groupList, getApplicationContext(), new CustomItemClickListener() {
