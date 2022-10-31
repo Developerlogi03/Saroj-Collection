@@ -121,5 +121,8 @@ public interface  APIInterface {
     @FormUrlEncoded
     @POST("/api/retailer-invoice-list")
     Call<String> retailerInvoicelist( @Field("api_token") String token,@Field("retailer_id") String retailer_id);
+    @FormUrlEncoded
+    @POST("/api/update-expense-voucher")
+    Call<String> updateExpenseVoucher( @Field("api_token") String token,@Field("status") String status,@Field("id") String voucher_id);
 
 }
