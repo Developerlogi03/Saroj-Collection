@@ -106,10 +106,10 @@ public class GroupActivity extends AppCompatActivity {
                                     JSONObject dataobj = dataArray.getJSONObject(i);
                                     boolean iscolor = false;
 
-                               /*     int diff = dataobj.optInt("totalCredit") - dataobj.optInt("totalDebit");
+                                   int diff = dataobj.optInt("total_credit") - dataobj.optInt("total_debit");
                                     String value = String.valueOf(diff).trim();
                                     String finVal = value.replace("-","");
-                                 */
+
                                     groupId = dataobj.getString("group_id");
                                     groupName = dataobj.getString("group_name");
                                     if (!dataobj.getString("color").isEmpty()){
@@ -122,7 +122,7 @@ public class GroupActivity extends AppCompatActivity {
                                         groupModel.setGroupColor(color);
                                         groupModel.setGroupName(groupName);
                                         groupModel.setColor(iscolor);
-                                        //groupModel.setAmount("₹ "+finVal);
+                                        groupModel.setAmount("₹ "+finVal);
                                         groupList.add(groupModel);
 
                                         adapter = new GroupAdapter(groupList, getApplicationContext(), new CustomItemClickListener() {

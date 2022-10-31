@@ -67,7 +67,7 @@ public class ExpenseVoucherListModel {
         private Object approveUserId;
         @SerializedName("approve_status")
         @Expose
-        private Object approveStatus;
+        private String approveStatus;
         @SerializedName("created_at")
         @Expose
         private String createdAt;
@@ -155,11 +155,11 @@ public class ExpenseVoucherListModel {
             this.approveUserId = approveUserId;
         }
 
-        public Object getApproveStatus() {
+        public String getApproveStatus() {
             return approveStatus;
         }
 
-        public void setApproveStatus(Object approveStatus) {
+        public void setApproveStatus(String approveStatus) {
             this.approveStatus = approveStatus;
         }
 

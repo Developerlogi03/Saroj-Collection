@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,11 +51,14 @@ public class VoucherApprovalAdapter extends RecyclerView.Adapter<VoucherApproval
         holder.tvName.setText(expensesList.get(position).getDealerId().toString());
         holder.tvAmount.setText("₹"+expensesList.get(position).getAmount().toString());
         holder.tvType.setText(expensesList.get(position).getMode().toString().toUpperCase());
-        if (expensesList.get(position).getApproveStatus() == null || expensesList.get(position).getApproveStatus()== "0"){
+        String status = expensesList.get(position).getApproveStatus();
+        Log.d("s1",status);
+
+        if (status.equals("0")){
             holder.linearAction.setVisibility(View.VISIBLE);
-        }else if (expensesList.get(position).getApproveStatus().toString().equals("1")){
+        }else if (status.equals("1")){
             holder.tvStatus.setText("Approved");
-            Log.d(TAG, "onBindViewHolder: "+expensesList.get(position).getApproveStatus().toString());
+            Log.d("s2",status);
 
         }
 
@@ -81,11 +85,12 @@ public class VoucherApprovalAdapter extends RecyclerView.Adapter<VoucherApproval
             btnReject = itemView.findViewById(R.id.btnDecline);
             tvStatus = itemView.findViewById(R.id.tvStatus);
 
-            
+
             btnApprove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: Approve");
+                    Toast.makeText(context.getApplicationContext(), "Approved", Toast.LENGTH_SHORT).show();
                 }
             });
             
@@ -93,6 +98,8 @@ public class VoucherApprovalAdapter extends RecyclerView.Adapter<VoucherApproval
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: Reject");
+                    Toast.makeText(context.getApplicationContext(), "Rejected", Toast.LENGTH_SHORT).show();
+
                 }
             });
 
